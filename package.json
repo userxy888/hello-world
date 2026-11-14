@@ -1,0 +1,12 @@
+{
+  "name": "hello-world-website",
+  "version": "1.0.0",
+  "description": "我的第一个 AI 开发的网站（Node.js 原生 http 实现）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "author": "邢馨月",
+  "license": "MIT"
+}

@@ -1,0 +1,251 @@
+/* ============ 全局重置 ============ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-deep: #070b1a;
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --card-border: rgba(255, 255, 255, 0.14);
+  --text-main: #f5f7ff;
+  --text-sub: #a8b0c8;
+  --accent-1: #6ee7ff;
+  --accent-2: #a78bfa;
+  --accent-3: #f472b6;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  color: var(--text-main);
+  background: radial-gradient(circle at 20% 15%, #14203f 0%, #070b1a 45%, #04060f 100%);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ============ 背景光斑 ============ */
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  animation: float 16s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 380px;
+  height: 380px;
+  background: #2563eb;
+  top: -110px;
+  left: -80px;
+}
+
+.orb-2 {
+  width: 320px;
+  height: 320px;
+  background: #7c3aed;
+  bottom: -120px;
+  right: -60px;
+  animation-delay: -5s;
+}
+
+.orb-3 {
+  width: 240px;
+  height: 240px;
+  background: #0ea5e9;
+  top: 45%;
+  right: 12%;
+  opacity: 0.35;
+  animation-delay: -9s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(30px, -25px) scale(1.08); }
+}
+
+/* ============ 主卡片 ============ */
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 760px;
+  padding: 52px 48px 36px;
+  border-radius: 28px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  animation: cardIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.badge {
+  display: inline-block;
+  padding: 7px 16px;
+  margin-bottom: 26px;
+  border-radius: 999px;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: var(--accent-1);
+  background: rgba(110, 231, 255, 0.1);
+  border: 1px solid rgba(110, 231, 255, 0.28);
+}
+
+/* ============ 标题 ============ */
+.title {
+  font-size: clamp(30px, 5vw, 46px);
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.title .name {
+  background: linear-gradient(100deg, var(--accent-1), var(--accent-2) 45%, var(--accent-3));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  margin-top: 16px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-sub);
+}
+
+/* ============ 服务器时间 ============ */
+.clock-box {
+  margin-top: 32px;
+  padding: 24px 26px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.16), rgba(124, 58, 237, 0.13));
+  border: 1px solid rgba(148, 163, 255, 0.24);
+}
+
+.clock-label {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--text-sub);
+  text-transform: uppercase;
+}
+
+.clock {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+}
+
+#date {
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.weekday {
+  font-size: 15px;
+  color: var(--accent-1);
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: rgba(110, 231, 255, 0.1);
+}
+
+.time {
+  font-size: clamp(28px, 4.5vw, 38px);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 1px;
+}
+
+.clock-meta {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--text-sub);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.dot { opacity: 0.5; }
+
+.status { transition: color 0.3s ease; }
+.status.ok { color: #4ade80; }
+
+/* ============ 信息栅格 ============ */
+.info-grid {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.info-item:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.info-item .k {
+  font-size: 12px;
+  color: var(--text-sub);
+  letter-spacing: 0.5px;
+}
+
+.info-item .v {
+  font-size: 14px;
+  font-weight: 600;
+  word-break: break-all;
+}
+
+/* ============ 页脚 ============ */
+.footer {
+  margin-top: 30px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-sub);
+}
+
+/* ============ 移动端适配 ============ */
+@media (max-width: 560px) {
+  .card { padding: 36px 24px 28px; border-radius: 22px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .clock-box { padding: 20px 18px; }
+  .clock { gap: 8px; }
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hello World · 我的第一个 AI 开发的网站</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>" />
+</head>
+<body>
+  <div class="bg-orbs">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+  </div>
+
+  <main class="card">
+    <span class="badge">Node.js · 原生 http 模块</span>
+
+    <h1 class="title">
+      Hello World！<br />
+      我是<span class="name">邢馨月</span>，<br />
+      我的第一个 AI 开发的网站
+    </h1>
+
+    <p class="subtitle">这一行字，是我和 AI 一起写下的第一行代码 ✨</p>
+
+    <div class="clock-box">
+      <div class="clock-label">当前服务器时间</div>
+      <div class="clock" id="serverClock">
+        <span id="date">加载中…</span>
+        <span id="weekday" class="weekday"></span>
+        <span id="time" class="time">--:--:--</span>
+      </div>
+      <div class="clock-meta">
+        <span id="timezone">时区：Asia/Shanghai (UTC+8)</span>
+        <span class="dot">·</span>
+        <span id="status" class="status">正在连接服务器…</span>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="k">运行环境</span>
+        <span class="v">Node.js <span id="nodeVer">—</span></span>
+      </div>
+      <div class="info-item">
+        <span class="k">页面地址</span>
+        <span class="v">http://localhost:3000</span>
+      </div>
+      <div class="info-item">
+        <span class="k">接口</span>
+        <span class="v">/api/time · /api/health</span>
+      </div>
+      <div class="info-item">
+        <span class="k">开发者</span>
+        <span class="v">邢馨月</span>
+      </div>
+    </div>
+
+    <footer class="footer">
+      Made with ❤️ &amp; AI · <span id="year">2026</span>
+    </footer>
+  </main>
+
+  <script>
+    const $date = document.getElementById('date');
+    const $weekday = document.getElementById('weekday');
+    const $time = document.getElementById('time');
+    const $timezone = document.getElementById('timezone');
+    const $status = document.getElementById('status');
+    const $year = document.getElementById('year');
+
+    $year.textContent = new Date().getFullYear();
+    $timezone.textContent = '时区：Asia/Shanghai (UTC+8)';
+
+    // 把数字补成两位：5 -> "05"
+    const pad = (n) => String(n).padStart(2, '0');
+
+    // 用浏览器本地时钟渲染（作为接口不可用时的兜底）
+    function renderLocalTime() {
+      const now = new Date();
+      $date.textContent = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+      $weekday.textContent = '星期' + '日一二三四五六'[now.getDay()];
+      $time.textContent = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+    }
+
+    // 从服务器接口拿时间（以服务器时间为准）
+    async function syncServerTime() {
+      try {
+        const res = await fetch('/api/time', { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        const [d, t] = data.datetime.split(' ');
+        $date.textContent = d;
+        $weekday.textContent = data.weekday;
+        $time.textContent = t;
+        $status.textContent = '✅ 已同步服务器时间';
+        $status.classList.add('ok');
+      } catch (err) {
+        $status.textContent = '⚠️ 接口不可用，改用本地时间';
+        $status.classList.remove('ok');
+        renderLocalTime();
+      }
+    }
+
+    // 首次立即同步，之后每秒一次
+    syncServerTime();
+    setInterval(syncServerTime, 1000);
+
+    // 顺便展示服务端真实的 Node 版本
+    fetch('/api/health')
+      .then((r) => r.json())
+      .then((data) => { document.getElementById('nodeVer').textContent = data.nodeVersion || '—'; })
+      .catch(() => {});
+  </script>
+</body>
+</html>
